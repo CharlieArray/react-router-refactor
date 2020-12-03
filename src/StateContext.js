@@ -1,7 +1,11 @@
 import React from 'react'
 
 const StateContext = React.createContext({
-    toggleState: () => {}
+    notes: [],
+    folders: [],
+    deleteNote: () => {},
+    addFolder: () => {},
+    addNote: () => {},
 })
 
 export default StateContext

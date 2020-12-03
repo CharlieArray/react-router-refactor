@@ -8,12 +8,12 @@ export default class FolderSidebar extends Component {
 
     return (
       <StateContext.Consumer>
-        {(state) => {
+        {(data) => {
           return (
             <div className="Sidebar">
               <h2>Side Bar</h2>
 
-              {state.folders.map((folder) => (
+              {data.state.folders.map((folder) => (
                 <li key={folder.id}>
                   <Link to={`/folder/`}>
                     <div className="Folder-Divs">

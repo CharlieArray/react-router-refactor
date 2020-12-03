@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import "./Noteful.css";
 import StateContext from "../StateContext";
 
-
-
 export default class NotesSidebar extends Component {
+  static contextType = StateContext;
   render() {
     const history = this.props.history;
+    const context = this.context;
 
     function handleBackClick() {
       history.goBack();
@@ -14,35 +14,26 @@ export default class NotesSidebar extends Component {
       //make sure you take care of "this" since its in a function
     }
 
-    <StateContext.Consumer>
-      {(state) => {
-        let allFolders = state.folders;
+    let allFolders = context.state.folders;
 
-        let fullURL = history.location.pathname;
-        let urlID = fullURL.slice(6, 42);
-        const notesArray = state.notes;
+    let fullURL = history.location.pathname;
+    let urlID = fullURL.slice(6, 42);
+    const notesArray = context.state.notes;
 
-        let noteIdResult;
-        notesArray.filter(function (note) {
-          if (note.id === urlID) {
-            noteIdResult = note.folderId;
-          }
-        });
+    let noteIdResult;
+    notesArray.filter(function (note) {
+      if (note.id === urlID) {
+        noteIdResult = note.folderId;
+      }
+    });
 
-        console.log(noteIdResult)
 
-        let folderNameResults;
-        allFolders.filter(function (folder) {
-          if (noteIdResult === folder.id) {
-            folderNameResults = folder.name;
-          }
-        });
-        console.log(folderNameResults)
-      }}
-    </StateContext.Consumer>;
-
-    // console.log(folderNameResults)
-    // let newVariable = folderNameResults
+    let folderNameResults;
+    allFolders.filter(function (folder) {
+      if (noteIdResult === folder.id) {
+        folderNameResults = folder.name;
+      }
+    });
 
     //known is notes.id   => match notes.id to store  =>
     //get back folderId of that notes element and return folder.id
@@ -53,9 +44,7 @@ export default class NotesSidebar extends Component {
 
         <h2>Side Bar</h2>
 
-        <div className="Folder-Divs">
-          {/* <h3>{newVariable}</h3> */}
-        </div>
+        <div className="Folder-Divs"><h3>{folderNameResults}</h3></div>
       </>
     );
   }

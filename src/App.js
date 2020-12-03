@@ -4,8 +4,9 @@ import "./App.css";
 import FolderPage from "./Components/FolderPage";
 import MainPage from "./Components/MainPage";
 import NotesPage from "./Components/NotesPage";
-import dummyStore from "./dummyStore";
+// import dummyStore from "./dummyStore";
 import StateContext from "./StateContext";
+import config from './config';
 
 class App extends React.Component {
   state = {
@@ -14,15 +15,43 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    // fake date loading from API call
-    setTimeout(() => this.setState(dummyStore), 100);
-  }
+    Promise.all([
+        fetch(`${config.API_ENDPOINT}/notes`),
+        fetch(`${config.API_ENDPOINT}/folders`)
+    ])
+        .then(([notesRes, foldersRes]) => {
+            if (!notesRes.ok)
+                return notesRes.json().then(e => Promise.reject(e));
+            if (!foldersRes.ok)
+                return foldersRes.json().then(e => Promise.reject(e));
+
+            return Promise.all([notesRes.json(), foldersRes.json()]);
+        })
+        .then(([notes, folders]) => {
+            this.setState({notes, folders});
+        })
+        .catch(error => {
+            console.error({error});
+        });
+}
+
+handleDeleteNote = noteId => {
+    this.setState({
+        notes: this.state.notes.filter(note => note.id !== noteId)
+    });
+};
+
+
 
   render() {
-  
+    const value = 
+    { state : this.state, 
+     deleteNote : this.handleDeleteNote}
+    
+
     return (
       //passed in context must be value = {whatever context}
-      <StateContext.Provider value={this.state}>
+      <StateContext.Provider value={value}>
         <div className="App">
           <Route
             exact

@@ -2,15 +2,15 @@ import React, { Component } from "react";
 import { Link, Route } from "react-router-dom";
 import NotesPage from "./NotesPage";
 import "./Noteful.css";
-import { findNote } from "../helperFunctions";
 import StateContext from "../StateContext";
 
+//might need to refacotr this to have a static contexType since its a class function
 export default class MainMain extends Component {
   render() {
 
     return (
       <StateContext.Consumer>
-        {(state) => {
+        {(data) => {
           return (
             <div className="Main">
               <h2>Main Page</h2>
@@ -19,15 +19,10 @@ export default class MainMain extends Component {
         <Route
             path='/note/:noteId'
             component = {NotesPage}
-            // render={ routeProps => {
-            //   const { noteId } = routeProps.match.params;
-            //   const note = findNote(notes, noteId);
-            //   note={note} />;
-            // }}
           />
 
         {/* This gave me most issues state passed in cannot be in { } for map/filter methods  */}
-        {state.notes.map((note) => (
+        {data.state.notes.map((note) => (
           <li key={note.id}>
             <Link to={`/note/${note.id}`}>
               <div className="Note-Divs">
